@@ -1,0 +1,40 @@
+h1{
+    text-align: center;
+    margin-top:60px;
+    font-size: 50px;
+}
+
+
+*{
+    margin-left:20px;
+    margin-right:20px;
+    padding:0;
+    font-family:'Trebuchet MS', sans-serif;
+    box-sizing:border-box;
+}
+.container {
+    display: flex;
+    justify-content: flex-start;  /* Align everything to the left of the page */
+    align-items: flex-start;     /* Align items at the top */
+    margin: 0;
+    padding: 0;
+}
+
+.image-text-wrapper {
+    width: 140px;                /* Match the width of the image */
+}
+
+.image-text-wrapper img {
+    display: block;              /* Ensures no extra space below the image */
+    width: 100%;                 /* Image takes the full width of the container */
+    height: auto;                /* Maintain the aspect ratio of the image */
+    margin: 0 auto;              /* Center the image within the wrapper */
+}
+
+.image-description {
+    margin-top: 5px;             /* Small space between the image and the text */
+    font-size: 14px;             /* Adjust the text size as needed */
+    text-align: justify;         /* Ensures text aligns neatly to both left and right edges */
+    line-height: 1.4;            /* Adjust line spacing for readability */
+    padding: 0 2px;              /* Slight padding on sides to avoid text touching edges */
+}

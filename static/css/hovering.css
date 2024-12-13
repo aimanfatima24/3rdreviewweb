@@ -1,0 +1,27 @@
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.hover-image {
+    width: 140px; /* Adjust as needed */
+    height: 200px; /* Adjust as needed */
+}
+
+.add-review-button {
+    display: none; /* Initially hidden */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.image-container:hover .add-review-btn {
+    display: block; /* Show the button when hovered */
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset = "UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- #block cross-scripting from malicious users -->
+    <meta http-equiv ="Content-Security-Policy" content=" script-src 'self';">
+    
+    <title> Add review</title>
+    <link rel="stylesheet" href="/static/css/styled.css">
+</head>
+
+<body>
+    <h1>Add a review here!</h1>
+    <nav>
+        <a href="/">Home</a>
+        <!--- <a href ="/login">Login</a> -->
+        <!--  <a href ="/signup">Sign up</a> -->
+        <a href ="/">Logout</a>
+        <br>
+    </nav>
+
+    <body>
+        <div class="container">
+          <div class="form-box">
+            <h1 id="title">Add a review</h1>
+            <form action="/addreview" method="POST">
+              <div class="input-group" id="nameField">
+        
+                <div class="input-field">
+                  <i class="fa-solid fa-tv"></i>
+                  <input type="text" placeholder="Movie Name" name="movei_name" id="movie" required>
+                </div>
+        
+                <div class="input-field">
+                  <i class="fa-solid fa-book"></i>
+                  <input type="text" placeholder="Your review" name="review" id="review" required>
+                </div>
+        
+              </div>
+              <div class="btn-field">
+                <button type="submit" >Add review</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        </body>
+        </html>
