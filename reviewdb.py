@@ -2,15 +2,15 @@ import sqlite3 as db
 
 DATABASE= 'review.db'
 
-def init_db():
+def init_database():
     conn= db.connect(DATABASE)
     cursor=conn.cursor()
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS reviews(
+        CREATE TABLE IF NOT EXISTS movie_review(
                    id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                   user_id INTEGER NOT NULL,
-                   movie TEXT NOT NULL,
-                   review TEXT NOT NULL,
+                   user_id TEXT,
+                   movie TEXT,
+                   review TEXT,
                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                    );
 
@@ -25,10 +25,16 @@ def add_review(movie, review, user_id):
     
     """
     conn=db.connect(DATABASE)
+    print(DATABASE)
     cursor=conn.cursor()
-    try:
-        print(movie, review, user_id)
-        cursor.execute('INSERT INTO reviews (movie, review, user_id) VALUES(?, ?, ?)',
+    print(movie, review, user_id)
+    cursor.execute('INSERT INTO movie_review (movie, review, user_id) VALUES(?, ?, ?)',
                        (movie, review, user_id))
-    finally:
-        conn.close()
+    conn.commit()
+    conn.close()
+    print("completed")
+
+
+    #cursor.execute('INSERT INTO reviews (movie, review, user_id) VALUES(?, ?, ?)',
+                       #(movie, review, user_id))
+    

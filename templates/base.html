@@ -12,8 +12,8 @@
     <h1>AM: Movie and Game Group!</h1>
     
     <nav>
-        <a href="/">Home</a>
         {% if 'user_id' in session %}
+            <a href="/">Home</a>
             <a href="/logout">Logout</a>
             <a href="/addreview">Add a review</a>
         {% else %}

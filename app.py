@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from database import init_db, add_user, verify_password
-from reviewdb import init_db, add_review
+from reviewdb import init_database, add_review
 import sqlite3 as db
 
 app = Flask(__name__)
 app.secret_key= 'hessjee'
 
 init_db()
+init_database()
 
 @app.route("/")
 def home():
@@ -15,11 +16,7 @@ def home():
     ]
 
     print("Session Data:", session)
-    if 'user_id' in session:
-        return render_template("loggedin.html", movies=movies, user_email = session['email'])
-    else:
-        print("not in sesh")
-        return render_template("base_not.html")
+    return render_template("base.html")
     
     
 
@@ -69,19 +66,14 @@ def signup():
     return render_template("signup.html")
 
 
-@app.route("/logout")
-def logout():
-    session.pop('user_id', None)
-    session.pop('email', None)
-    flash("You have been logged out")
-    return redirect(url_for('base_not.html'))
-
 @app.route("/addreview", methods=["GET", "POST"])
+
 def add_review_route():
     if request.method == "POST":
         movie= request.form.get("movie")
         review= request.form.get("review")
         user_id = session.get("user_id")
+        print(f'User id={user_id}')
 
         result = add_review(movie, review, user_id)
     return render_template("review.html")
@@ -90,6 +82,15 @@ def add_review_route():
 
     movie= request.args.get("movie")
     return render_template("review.html", movie=movie)
+
+
+@app.route("/logout")
+def logout():
+    session.pop('user_id', None)
+    session.pop('email', None)
+    print("Session after logout:", session)
+    #flash("You have been logged out")
+    return render_template('base.html')
 
 if __name__ == '__main__':
     init_db()

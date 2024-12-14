@@ -83,3 +83,19 @@ transition: background-color 1s;
     background: #eaeaea;
     color: #555;
 }
+
+.review{
+    background: #D3D3D3;
+    margin: 15px 0;
+    border-radius: 3px;
+    display: flex;
+    align-items:center;
+}
+
+.movie{
+    background: #D3D3D3;
+    margin: 15px 0;
+    border-radius: 3px;
+    display: flex;
+    align-items:center;
+}
