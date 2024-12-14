@@ -16,6 +16,7 @@ def before_request():
         session.clear()  # Clear the session
         session['initialized'] = True  # Set the flag to indicate session has been initialized
 
+
 @app.route("/")
 def home():
     movies = [
@@ -23,12 +24,13 @@ def home():
     ]
 
     print("Session Data:", session)
-    if 'user_id' in session:
-        print('IN SESSION')
-        return render_template('base.html')
-    else:
-        return render_template("base_not.html")
+    return render_template("base_not.html")
     
+
+@app.route("/homepage")
+def homepage():
+    if 'user_id':
+        return render_template('base.html')
     
 
 @app.route("/login",  methods=['GET', 'POST'])
@@ -103,6 +105,25 @@ def logout():
     print("Session after logout:", session)
     #flash("You have been logged out")
     return render_template('base.html')
+
+
+def get_user_by_id(user_id):
+    conn=db.connect('registration.db')
+    cursor=conn.cursor()
+    cursor.execute ("SELECT name FROM users WHERE id=?", (user_id,))
+    result=cursor.fetchone()
+    conn.close()
+    return result[0] if result else None
+
+@app.route("/view")
+def view():
+    user_id = session.get('user_id')
+    if user_id:
+        user_name = get_user_by_id(user_id)
+        return render_template("view.html", name=user_name)
+    else:
+        flash("You need to log in first.")
+        return redirect(url_for('login'))
 
 if __name__ == '__main__':
     init_db()
