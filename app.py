@@ -9,6 +9,13 @@ app.secret_key= 'hessjee'
 init_db()
 init_database()
 
+@app.before_request
+def before_request():
+    # Check if the session has been initialized
+    if 'initialized' not in session:
+        session.clear()  # Clear the session
+        session['initialized'] = True  # Set the flag to indicate session has been initialized
+
 @app.route("/")
 def home():
     movies = [
@@ -16,7 +23,11 @@ def home():
     ]
 
     print("Session Data:", session)
-    return render_template("base.html")
+    if 'user_id' in session:
+        print('IN SESSION')
+        return render_template('base.html')
+    else:
+        return render_template("base_not.html")
     
     
 
@@ -72,10 +83,11 @@ def add_review_route():
     if request.method == "POST":
         movie= request.form.get("movie")
         review= request.form.get("review")
+        title= request.form.get("title")
         user_id = session.get("user_id")
         print(f'User id={user_id}')
 
-        result = add_review(movie, review, user_id)
+        result = add_review(movie, review, user_id, title)
     return render_template("review.html")
         #flash a message saying flash(f"Review for {movie} added successfully!")
     
