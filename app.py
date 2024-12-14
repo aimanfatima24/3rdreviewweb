@@ -50,7 +50,7 @@ def login():
         if result:
             stored_password = result[0]
             if verify_password(stored_password, password):
-                session['user_id']=result[0]
+                session['user_id']= result[0]
                 session['email'] =email
                 print ("Login successful")
                 return render_template("loggedin.html")
@@ -69,11 +69,13 @@ def signup():
         email = request.form['email']
         dob = request.form['dob']
         password = request.form['password']
+        user_id = session.get("user_id")
 
-        result = add_user(name, email, dob, password)
-        if result == "email exists":
-            return "Email already exists!"
         
+        result = add_user(user_id, name, email, dob, password)
+        if result == "email exists":
+            return redirect(url_for('signup'))
+                    
         return redirect(url_for('login'))
 
     return render_template("signup.html")
@@ -86,17 +88,14 @@ def add_review_route():
         movie= request.form.get("movie")
         review= request.form.get("review")
         title= request.form.get("title")
+        rating= request.form.get("rating")
         user_id = session.get("user_id")
         print(f'User id={user_id}')
 
-        result = add_review(movie, review, user_id, title)
+        result = add_review(movie, review, user_id, title, rating)
     return render_template("review.html")
         #flash a message saying flash(f"Review for {movie} added successfully!")
     
-
-    movie= request.args.get("movie")
-    return render_template("review.html", movie=movie)
-
 
 @app.route("/logout")
 def logout():
@@ -110,20 +109,40 @@ def logout():
 def get_user_by_id(user_id):
     conn=db.connect('registration.db')
     cursor=conn.cursor()
-    cursor.execute ("SELECT name FROM users WHERE id=?", (user_id,))
+    #user_id='scrypt:32768:8:1$hPQbrKiHeq0R6WkX$dcd41ad7557192faaeaf1b542f184325155df463df9fe7c7d364f28a7e98d6f2078d01b08de2b8dfcb584d6d3b8a2b001395b63cba4e56cb88c62f27376d287b'
+    #user_id = session.get('user_id')
+    print(f'userid={user_id}')
+    print(f'Executing query: SELECT name FROM users WHERE password="{user_id}"')
+
+    cursor.execute ("SELECT name FROM users WHERE password=?", (user_id,))
     result=cursor.fetchone()
+    print(f'name is {result[0]}')
     conn.close()
-    return result[0] if result else None
+    
+    return result[0]
 
 @app.route("/view")
 def view():
     user_id = session.get('user_id')
+    print(f'user id is:{user_id}')
+    conn=db.connect('review.db')
+    cursor=conn.cursor()
+
+    cursor.execute("SELECT movie, title, created_at, review, rating FROM movie_review WHERE user_id=?", (user_id,))
+    reviews = cursor.fetchall()
+    conn.close()
+
     if user_id:
         user_name = get_user_by_id(user_id)
-        return render_template("view.html", name=user_name)
+        print(f'user name is {user_name}')
+        return render_template("view.html", name=user_name, reviews=reviews)
     else:
         flash("You need to log in first.")
         return redirect(url_for('login'))
+    
+    
+
+    return render_template("view.html", reviews=reviews)
 
 if __name__ == '__main__':
     init_db()

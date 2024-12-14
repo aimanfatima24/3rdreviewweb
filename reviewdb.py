@@ -10,6 +10,7 @@ def init_database():
                    id INTEGER PRIMARY KEY AUTOINCREMENT, 
                    user_id TEXT,
                    review title TEXT,
+                   rating INTEGER,
                    movie TEXT,
                    review TEXT,
                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -20,7 +21,7 @@ def init_database():
     conn.close()
 
 
-def add_review(movie, review, user_id, title):
+def add_review(movie, review, user_id, title, rating):
     """
     Adds a new review to the database.
     
@@ -28,14 +29,10 @@ def add_review(movie, review, user_id, title):
     conn=db.connect(DATABASE)
     print(DATABASE)
     cursor=conn.cursor()
-    print(movie, review, user_id, title)
-    cursor.execute('INSERT INTO movie_review (movie, review, user_id, title) VALUES(?, ?, ?, ?)',
-                       (movie, review, user_id, title))
+    print(movie, review, user_id, title, rating)
+    cursor.execute('INSERT INTO movie_review (movie, review, user_id, title, rating) VALUES(?, ?, ?, ?, ?)',
+                       (movie, review, user_id, title, rating))
     conn.commit()
     conn.close()
     print("completed")
-
-
-    #cursor.execute('INSERT INTO reviews (movie, review, user_id) VALUES(?, ?, ?)',
-                       #(movie, review, user_id))
     

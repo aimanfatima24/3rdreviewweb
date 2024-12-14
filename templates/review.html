@@ -45,12 +45,18 @@
                   </select>
                   <!--t type="text" placeholder="Movie Name" name="movie" id="movie" required>-->
                 </div>
+              
+
 
                 <div class="title">
                   <i class="fa-solid far-book"></i>
                   <input type="text" placeholder="Review title" name="title" id="title" required> </input>
                 </div>
-        
+
+                <label for="rating">Rating (out of 5):</label><br>
+                <input type="number" id="rating" name="rating" min="1" max="5" step="1" required>
+                <small>Enter a whole number between 1 and 5.</small><br><br>
+                
                 <div class="review">
                   <i class="fa-solid fa-book"></i>
                   <textarea type="text" placeholder="Your review" name="review" id="review" required> </textarea>
