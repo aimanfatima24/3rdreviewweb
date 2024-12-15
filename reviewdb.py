@@ -1,4 +1,5 @@
 import sqlite3 as db
+from flask import session
 
 DATABASE= 'review.db'
 
@@ -28,6 +29,7 @@ def add_review(movie, review, user_id, title, rating):
     """
     conn=db.connect(DATABASE)
     print(DATABASE)
+    user_id= session.get("user_id")
     cursor=conn.cursor()
     print(movie, review, user_id, title, rating)
     cursor.execute('INSERT INTO movie_review (movie, review, user_id, title, rating) VALUES(?, ?, ?, ?, ?)',

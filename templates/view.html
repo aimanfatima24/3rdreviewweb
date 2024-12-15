@@ -13,10 +13,9 @@
 </nav>
 {% if reviews %}
     <div class="reviews-list">
-    {% for movie, title, created_at, review, rating,name in reviews %}
+    {% for movie, title, created_at, review, rating in reviews %}
         <div class="review-item">
             <h3>{{ movie }} - {{ title }}</h3>
-            <p><stron>User:</stron> {{name}} </p>
             <p><strong>Review:</strong> {{ review }}</p>
             <p><strong>Rating:</strong> {{ rating }}/5</p>
             <p><strong>Date:</strong>{{created_at}}</p>

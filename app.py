@@ -127,11 +127,11 @@ def get_user_by_id(user_id):
     #user_id='scrypt:32768:8:1$hPQbrKiHeq0R6WkX$dcd41ad7557192faaeaf1b542f184325155df463df9fe7c7d364f28a7e98d6f2078d01b08de2b8dfcb584d6d3b8a2b001395b63cba4e56cb88c62f27376d287b'
     #user_id = session.get('user_id')
     print(f'userid={user_id}')
-    print(f'Executing query: SELECT name FROM users WHERE password="{user_id}"')
+    print(f'Executing query: SELECT name FROM users WHERE user_id="{user_id}"')
 
-    cursor.execute ("SELECT name FROM users WHERE password=?", (user_id,))
+    cursor.execute ("SELECT name FROM users WHERE user_id=?", (user_id,))
     result=cursor.fetchone()
-    print(f'name is {result[0]}')
+    print(result)
     conn.close()
     
     return result[0]
@@ -172,19 +172,21 @@ def viewall():
             movie_review.created_at, 
             movie_review.review, 
             movie_review.rating, 
-            users_db.users.name
+            users.name
         FROM movie_review
         JOIN users_db.users ON movie_review.user_id = users_db.users.user_id
+        ORDER BY movie_review.created_at DESC
     """)
     reviews = cursor_reviews.fetchall()
     
     conn_reviews.close()
     
     if user_id:
-        return render_template("view.html", reviews=reviews)
+        return render_template("viewall.html", reviews=reviews)
     else:
         flash("You need to log in first.")
         return redirect(url_for('login'))
+
 
 
 if __name__ == '__main__':
