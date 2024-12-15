@@ -16,6 +16,7 @@
     <div class="reviews-list">
     {% for movie, title, created_at, review, rating in reviews %}
         <div class="review-item">
+            <p>{{name}}</p>
             <h3>{{ movie }} - {{ title }}</h3>
             <p><strong>Review:</strong> {{ review }}</p>
             <p><strong>Rating:</strong> {{ rating }}/5</p>

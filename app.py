@@ -3,22 +3,27 @@ from database import init_db, add_user, verify_password
 from reviewdb import init_database, add_review
 import sqlite3 as db
 
+#initialise the flask app
 app = Flask(__name__)
-app.secret_key= 'hessjee'
+app.secret_key= 'hessjee' #creates a secret key essential for session management
 
+#this initialises the database for both registration and reviews.
 init_db()
 init_database()
 
+#before the app starts, do the following
 @app.before_request
 def before_request():
     # Check if the session has been initialized
     if 'initialized' not in session:
         session.clear()  # Clear the session
-        session['initialized'] = True  # Set the flag to indicate session has been initialized
+        session['initialized'] = True  #indicate session has been initialized
 
 
+#creating the home route which is the default when app opens initially.
 @app.route("/")
 def home():
+    #example movie data for the homepage.
     movies = [
         {"title": "Moana", "image": "static/images/moana2.jpg"}
     ]
@@ -127,14 +132,17 @@ def get_user_by_id(user_id):
     #user_id='scrypt:32768:8:1$hPQbrKiHeq0R6WkX$dcd41ad7557192faaeaf1b542f184325155df463df9fe7c7d364f28a7e98d6f2078d01b08de2b8dfcb584d6d3b8a2b001395b63cba4e56cb88c62f27376d287b'
     #user_id = session.get('user_id')
     print(f'userid={user_id}')
-    print(f'Executing query: SELECT name FROM users WHERE user_id="{user_id}"')
+    print(f'Executing query: SELECT name FROM users WHERE password="{user_id}"')
 
-    cursor.execute ("SELECT name FROM users WHERE user_id=?", (user_id,))
+    cursor.execute ("SELECT name FROM users WHERE password=?", (user_id,))
     result=cursor.fetchone()
     print(result)
     conn.close()
     
-    return result[0]
+    if result:
+        return result[0]
+    else:
+        return 'hey'
 
 @app.route("/view")
 def view():
@@ -178,6 +186,7 @@ def viewall():
         ORDER BY movie_review.created_at DESC
     """)
     reviews = cursor_reviews.fetchall()
+    print(f'Reviews fetched{reviews}')
     
     conn_reviews.close()
     
