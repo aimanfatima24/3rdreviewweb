@@ -56,7 +56,8 @@ def login():
                 return render_template("loggedin.html")
                 #flash logged in message
             else:
-                return "Incorrect username or password"
+                flash("Incorrect username or password", category="error")
+                return redirect(url_for('login'))
         else:
             return "No user found"
         
@@ -71,7 +72,21 @@ def signup():
         password = request.form['password']
         user_id = session.get("user_id")
 
+        if len(password) <5:
+            flash("Password too short", category="error")
+        elif len(name) <2:
+            flash("Please enter a valid name", category="error")
         
+        conn = db.connect('registration.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE email=?", (email,))
+        existing_user= cursor.fetchone()
+        conn.close()
+
+        if existing_user:
+            flash('email already exists!', category="error")
+            return redirect(url_for('signup'))
+
         result = add_user(user_id, name, email, dob, password)
         if result == "email exists":
             return redirect(url_for('signup'))
