@@ -13,7 +13,7 @@ if ('serviceWorker' in navigator) {
         event.respondWith(
           caches.match(event.request)
             .then((cachedResponse) => {
-              // If no cached response, serve the offline page
+              //If no cached response, serve the base not html page
               return cachedResponse || caches.match('/base_not.html');
             })
         );
