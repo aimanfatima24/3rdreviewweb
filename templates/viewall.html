@@ -8,12 +8,9 @@
 </head>
 
 <h2>All Reviews</h2>
-<nav>
-    <a href="/homepage">Home</a>
-</nav>
 {% if reviews %}
     <div class="reviews-list">
-    {% for movie, title, created_at, review, rating,name in reviews %}
+    {% for movie, title, created_at, review, rating in reviews %}
         <div class="review-item">
             <h3>{{ movie }} - {{ title }}</h3>
             <p><stron>User:</stron> {{name}} </p>

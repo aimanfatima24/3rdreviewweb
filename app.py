@@ -155,9 +155,37 @@ def view():
         flash("You need to log in first.")
         return redirect(url_for('login'))
     
-    
+@app.route("/viewall")
+def viewall():
+    user_id = session.get('user_id')
+    conn_reviews = db.connect('review.db')
+    cursor_reviews = conn_reviews.cursor()
 
-    return render_template("view.html", reviews=reviews)
+    # Attach the second database (users)
+    conn_reviews.execute("ATTACH DATABASE 'registration.db' AS users_db")
+    
+    # Fetch reviews with the user's name using a JOIN
+    cursor_reviews.execute("""
+        SELECT 
+            movie_review.movie, 
+            movie_review.title, 
+            movie_review.created_at, 
+            movie_review.review, 
+            movie_review.rating, 
+            users_db.users.name
+        FROM movie_review
+        JOIN users_db.users ON movie_review.user_id = users_db.users.user_id
+    """)
+    reviews = cursor_reviews.fetchall()
+    
+    conn_reviews.close()
+    
+    if user_id:
+        return render_template("view.html", reviews=reviews)
+    else:
+        flash("You need to log in first.")
+        return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     init_db()
